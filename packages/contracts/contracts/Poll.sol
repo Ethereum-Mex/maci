@@ -182,7 +182,10 @@ contract Poll is Params, Utilities, SnarkCommon, IPoll {
   /// @dev Can only be submitted before the voting deadline
   /// @param _messages the messages
   /// @param _encPubKeys the encrypted public keys
-  function publishMessageBatch(Message[] calldata _messages, PubKey[] calldata _encPubKeys) external {
+  function publishMessageBatch(
+    Message[] calldata _messages,
+    PubKey[] calldata _encPubKeys
+  ) public virtual isWithinVotingDeadline {
     if (_messages.length != _encPubKeys.length) {
       revert InvalidBatchLength();
     }
@@ -199,7 +202,7 @@ contract Poll is Params, Utilities, SnarkCommon, IPoll {
   }
 
   /// @inheritdoc IPoll
-  function mergeMaciState() public isAfterVotingDeadline {
+  function mergeMaciState() public virtual isAfterVotingDeadline {
     // This function can only be called once per Poll after the voting
     // deadline
     if (stateMerged) revert StateAlreadyMerged();
@@ -234,13 +237,13 @@ contract Poll is Params, Utilities, SnarkCommon, IPoll {
   }
 
   /// @inheritdoc IPoll
-  function mergeMessageAqSubRoots(uint256 _numSrQueueOps) public isAfterVotingDeadline {
+  function mergeMessageAqSubRoots(uint256 _numSrQueueOps) public virtual isAfterVotingDeadline {
     extContracts.messageAq.mergeSubRoots(_numSrQueueOps);
     emit MergeMessageAqSubRoots(_numSrQueueOps);
   }
 
   /// @inheritdoc IPoll
-  function mergeMessageAq() public isAfterVotingDeadline {
+  function mergeMessageAq() public virtual isAfterVotingDeadline {
     uint256 root = extContracts.messageAq.merge(treeDepths.messageTreeDepth);
     emit MergeMessageAq(root);
   }
