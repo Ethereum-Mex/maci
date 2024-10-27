@@ -323,10 +323,13 @@ export class Deployment {
         ? new ContractFactory(abi, bytecode, deployer)
         : await import("hardhat").then(({ ethers }) => ethers.getContractFactory(name, deployer));
     const feeData = await deployer.provider?.getFeeData();
-
+    console.log(feeData);
     const contract = await contractFactory.deploy(...args, {
-      maxFeePerGas: feeData?.maxFeePerGas,
-      maxPriorityFeePerGas: feeData?.maxPriorityFeePerGas,
+      // maxFeePerGas: feeData?.maxFeePerGas,
+      // maxPriorityFeePerGas: feeData?.maxPriorityFeePerGas,
+      // maxFeePerGas: 70000000,
+      // maxPriorityFeePerGas: 1
+      gasPrice: process.env.GAS_PRICE ? Number(process.env.GAS_PRICE) : feeData?.gasPrice,
     });
     await contract.deploymentTransaction()!.wait();
 
@@ -346,10 +349,13 @@ export class Deployment {
   ): Promise<T> {
     const deployer = await this.getDeployer();
     const feeData = await deployer.provider.getFeeData();
-
+    console.log(feeData);
     const contract = await contractFactory.deploy(...args, {
-      maxFeePerGas: feeData.maxFeePerGas,
-      maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+      // maxFeePerGas: feeData.maxFeePerGas,
+      // maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
+      // maxFeePerGas: 70000000,
+      // maxPriorityFeePerGas: 1
+      gasPrice: process.env.GAS_PRICE ? Number(process.env.GAS_PRICE) : feeData.gasPrice,
     });
     await contract.deploymentTransaction()!.wait();
 
