@@ -6,6 +6,7 @@ export enum ESupportedChains {
   OptimismSepolia = "optimism_sepolia",
   Coverage = "coverage",
   Hardhat = "hardhat",
+  Optimism = "optimism",
 }
 
 /**
@@ -16,6 +17,7 @@ export enum EChainId {
   OptimismSepolia = 11155420,
   Sepolia = 11155111,
   Coverage = 1337,
+  Optimism = 10,
 }
 
 const GWEI = 1e9;
@@ -38,6 +40,7 @@ export const NETWORKS_DEFAULT_GAS: Record<ESupportedChains, number | "auto"> = {
   [ESupportedChains.OptimismSepolia]: gasPrice(1),
   [ESupportedChains.Coverage]: gasPrice(1),
   [ESupportedChains.Hardhat]: gasPrice(1),
+  [ESupportedChains.Optimism]: gasPrice(1),
 };
 
 /**
@@ -48,12 +51,14 @@ export const NETWORKS_DEFAULT_GAS: Record<ESupportedChains, number | "auto"> = {
 export const getNetworkRpcUrls = (): Record<ESupportedChains, string> => {
   const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL ?? "";
   const OP_SEPOLIA_RPC_URL = process.env.OP_SEPOLIA_RPC_URL ?? "";
+  const OP_RPC_URL = process.env.OP_RPC_URL ?? "";
 
   return {
     [ESupportedChains.Sepolia]: SEPOLIA_RPC_URL,
     [ESupportedChains.OptimismSepolia]: OP_SEPOLIA_RPC_URL,
     [ESupportedChains.Coverage]: "http://localhost:8555",
     [ESupportedChains.Hardhat]: "http://localhost:8545",
+    [ESupportedChains.Optimism]: OP_RPC_URL,
   };
 };
 
@@ -62,4 +67,5 @@ export const getEtherscanApiKeys = (): Record<ESupportedChains, string | undefin
   [ESupportedChains.OptimismSepolia]: process.env.OPTIMISM_ETHERSCAN_API_KEY,
   [ESupportedChains.Coverage]: undefined,
   [ESupportedChains.Hardhat]: undefined,
+  [ESupportedChains.Optimism]: process.env.OPTIMISM_ETHERSCAN_API_KEY,
 });

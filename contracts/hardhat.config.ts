@@ -33,8 +33,8 @@ const ETHERSCAN_API_KEYS = getEtherscanApiKeys();
 const getCommonNetworkConfig = (networkName: ESupportedChains, chainId: number, mnemonic?: string) => ({
   url: NETWORKS_RPC_URL[networkName],
   blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
-  gasMultiplier: DEFAULT_GAS_MUL,
-  gasPrice: process.env.GAS_PRICE ? Number(process.env.GAS_PRICE) : NETWORKS_DEFAULT_GAS[networkName],
+  // gasMultiplier: DEFAULT_GAS_MUL,
+  // gasPrice: process.env.GAS_PRICE ? Number(process.env.GAS_PRICE) : NETWORKS_DEFAULT_GAS[networkName],
   saveDeployments: true,
   chainId,
   accounts: {
@@ -60,6 +60,7 @@ const config: HardhatUserConfig = {
     sepolia: getCommonNetworkConfig(ESupportedChains.Sepolia, EChainId.Sepolia),
     optimism_sepolia: getCommonNetworkConfig(ESupportedChains.OptimismSepolia, EChainId.OptimismSepolia),
     coverage: getCommonNetworkConfig(ESupportedChains.Coverage, EChainId.Coverage, TEST_MNEMONIC),
+    optimism: getCommonNetworkConfig(ESupportedChains.Optimism, EChainId.Optimism),
     localhost: {
       url: "http://localhost:8545",
       loggingEnabled: false,
@@ -101,6 +102,7 @@ const config: HardhatUserConfig = {
     apiKey: {
       [ESupportedChains.Sepolia]: ETHERSCAN_API_KEYS[ESupportedChains.Sepolia]!,
       [ESupportedChains.OptimismSepolia]: ETHERSCAN_API_KEYS[ESupportedChains.OptimismSepolia]!,
+      [ESupportedChains.Optimism]: ETHERSCAN_API_KEYS[ESupportedChains.Optimism]!,
     },
     customChains: [
       {
@@ -109,6 +111,14 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://api-sepolia-optimism.etherscan.io/api",
           browserURL: "https://sepolia-optimism.etherscan.io",
+        },
+      },
+      {
+        network: ESupportedChains.Optimism,
+        chainId: EChainId.Optimism,
+        urls: {
+          apiURL: "https://api-optimistic.etherscan.io/api",
+          browserURL: "https://api-optimistic.etherscan.io",
         },
       },
     ],
